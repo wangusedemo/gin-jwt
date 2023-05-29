@@ -417,6 +417,7 @@ func (mw *GinJWTMiddleware) MiddlewareFunc() gin.HandlerFunc {
 		for _, s := range mw.WhitePath {
 			if s == c.Request.URL.Path {
 				c.Next()
+				return
 			}
 		}
 		mw.middlewareImpl(c)
