@@ -155,6 +155,8 @@ type GinJWTMiddleware struct {
 
 	// ParseOptions allow to modify jwt's parser methods
 	ParseOptions []jwt.ParserOption
+
+	WhitePath []string
 }
 
 var (
@@ -412,6 +414,11 @@ func (mw *GinJWTMiddleware) MiddlewareInit() error {
 // MiddlewareFunc makes GinJWTMiddleware implement the Middleware interface.
 func (mw *GinJWTMiddleware) MiddlewareFunc() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		for _, s := range mw.WhitePath {
+			if s == c.Request.URL.Path {
+				c.Next()
+			}
+		}
 		mw.middlewareImpl(c)
 	}
 }
